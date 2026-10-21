@@ -10,33 +10,43 @@
 </head>
 
 <body>
-    <div>WELCOME TO THE SPIRAL SILLY GOOSES</div>
+    <h1>WELCOME TO THE SPIRAL</h1>
 
-    <label for="profile">Choose a Profile:</label>
-
-    <select id="profile" onchange="setProfile()">
-        <option value="newProfile" onclick="newProfile()">New Profile</option>
-    </select><br>
-
-    <span>Profile Name: <input type="text" id="profileName" placeholder="Enter profile name"><br></span>
     <span>Base Spell Damage: <input type="number" id="baseDamageInput" value="0"><br></span>
-    <span>Pierce: <input type="number" id="pierceInput" value="0"><br></span>
-    <span>Max Number of 20 Blades: <input type="number" id="max20BladesInput" value="0"><br></span>
-    <span>Max Number of 25 Blades: <input type="number" id="max25BladesInput" value="0"><br></span>
-    <span>Max Number of 30 Blades: <input type="number" id="max30BladesInput" value="0"><br></span>
-    <span>Max Number of 35 Blades: <input type="number" id="max35BladesInput" value="0"><br></span>
-    <span>Max Number of 45 Blades: <input type="number" id="max45BladesInput" value="0"><br></span>
-    <span>Max Number of 40 Blades: <input type="number" id="max40BladesInput" value="0"><br></span>
-    <span>Max Number of 55 Blades: <input type="number" id="max55BladesInput" value="0"><br></span>
-
-
-    <button onclick="saveProfile()">Save Profile</button>
-    <button onclick="deleteProfile()">Delete Profile</button><br>
-
+    <span>Base Damage Percent: <input type="number" id="damagePercentInput" value="0">%<br></span>
+    <span>Pierce: <input type="number" id="pierceInput" value="0">%<br></span>
     Traps Allowed? <input type="checkbox" id="trapsInput" checked><br>
     Blades Allowed? <input type="checkbox" id="bladesInput" checked><br><br>
 
-    <p id="result"></p>
+    Choose a Blade:
+    <button onclick="newBlade()">New Blade</button><br>
+
+    <div id="bladeContainer" style="display: none;">
+        <span>Blade Percent: <input type="number" id="bladePercentInput" value="0">%<br></span>
+        <span>Max Blade Amount: <input type="number" id="bladeAmountInput" value="0"><br></span>
+        <button onclick="addBlade()">Add Blade</button>
+        <button onclick="cancelBlade()">Cancel</button>
+        <div id="bladeList"></div>
+    </div><br>
+
+    Choose a Trap:
+    <button onclick="newTrap()">New Trap</button><br>
+
+    <div id="trapContainer" style="display: none;">
+        <span>Trap Percent: <input type="number" id="trapPercentInput" value="0">%<br></span>
+        <span>Max Trap Amount: <input type="number" id="trapAmountInput" value="0"><br></span>
+        <button onclick="addTrap()">Add Trap</button>
+        <div id="trapList"></div>
+        <button onclick="removeTrap()">Remove Trap</button><br>
+    </div><br>
+
+    <span>Enemy Health: <input type="number" id="healthInput" value="0"><br></span>
+    <span>Enemy Resist: <input type="number" id="resistInput" value="0">%<br></span><br>
+
+
+    <button onclick="calculateDamage()">Calculate</button>
+
+
 
 
 

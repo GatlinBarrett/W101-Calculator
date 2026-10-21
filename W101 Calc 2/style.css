@@ -1,8 +1,80 @@
 body {
-    background-color: #1a1a1a;
+    background-color: #291530;
     color: #f2f2f2;
     font-family: Arial, sans-serif;
     margin: 1;
     padding: 0;
     line-height: 2;
 }
+
+/*body {
+    background-color: #291530;
+    color: #f2f2f2;
+    font-family: Arial, sans-serif;
+    margin: 1;
+    padding: 0;
+    line-height: 1;
+
+}
+
+h1 {
+    font-family: Arial, sans-serif;
+    font-size: 3em;
+    text-align: center;
+    margin-top: 20px;
+    content: ' ';
+}
+
+
+p1 {
+    font-family: Arial, sans-serif;
+    font-size: 1em;
+    text-align: left;
+    margin-top: 2px;
+    bold: false;
+}
+
+input {
+    display: block;
+    width: 100%;
+    max-width: 100px;
+    padding: 12px;
+    margin: 1px auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+button,
+select {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 24px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: hand;
+}
+
+button:hover {
+    background-color: #3730a3;
+}
+
+
+
+
+
+
+
+
+
+/*
+#bladeContainer {
+    display: none;
+}
+
+#trapContainer {
+    display: none;
+}
+    */
