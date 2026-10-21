@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W101 Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <h3>
+        Amount of Boss Health: <input type="number" id="healthInput" value="0"><br>
+        Amount of Boss Resist: <input type="number" id="resistInput" value="0">%<br><br>
+        Your Spell Base Damage: <input type="number" id="baseDamageInput" value="0"><br>
+        Your Pierce Amount: <input type="number" id="pierceInput" value="0">%<br><br>
+        Traps Allowed? <input type="checkbox" id="trapsInput" checked><br>
+        Blades Allowed? <input type="checkbox" id="bladesInput" checked><br><br>
+        <button onclick="calculateDamage()" id="calculateButton">Calculate</button><br><br>
+    <div>70% feint:</div>
+    <span id="feintAmount"></span><span>x</span>
+    <div>80% feint:</div>
+    <span id="upfeintAmount"></span><span>x</span>
+    <div>35% blades:</div>
+    <span id="thirtybladeAmount"></span><span>x</span>
+    <div>45% blades:</div>
+    <span id="fortybladeAmount"></span><span>x</span>
+    <div>55% blades:</div>
+    <span id="fiftybladeAmount"></span><span>x</span>
+    <div>Total Damage:</div>
+    <span id="totalDamage"></span>
+    </h3>
+</body>
+</html>

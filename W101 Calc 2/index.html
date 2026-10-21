@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W101 Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div>WELCOME TO THE SPIRAL SILLY GOOSES</div>
+
+    <label for="profile">Choose a Profile:</label>
+
+    <select id="profile" onchange="setProfile()">
+        <option value="newProfile" onclick="newProfile()">New Profile</option>
+    </select><br>
+
+    <span>Profile Name: <input type="text" id="profileName" placeholder="Enter profile name"><br></span>
+    <span>Base Spell Damage: <input type="number" id="baseSpellDamage" value="0"><br></span>
+
+    <button onclick="saveProfile()">Save Profile</button>
+    <button onclick="deleteProfile()">Delete Profile</button><br><br>
+     <button onclick="calculate()">Load Profile</button><br><br>
+    <p id="result"></p>
+
+
+
+</body>
+
+</html>
