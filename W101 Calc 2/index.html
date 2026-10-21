@@ -19,11 +19,23 @@
     </select><br>
 
     <span>Profile Name: <input type="text" id="profileName" placeholder="Enter profile name"><br></span>
-    <span>Base Spell Damage: <input type="number" id="baseSpellDamage" value="0"><br></span>
+    <span>Base Spell Damage: <input type="number" id="baseDamageInput" value="0"><br></span>
+    <span>Pierce: <input type="number" id="pierceInput" value="0"><br></span>
+    <span>Max Number of 20 Blades: <input type="number" id="max20BladesInput" value="0"><br></span>
+    <span>Max Number of 25 Blades: <input type="number" id="max25BladesInput" value="0"><br></span>
+    <span>Max Number of 30 Blades: <input type="number" id="max30BladesInput" value="0"><br></span>
+    <span>Max Number of 35 Blades: <input type="number" id="max35BladesInput" value="0"><br></span>
+    <span>Max Number of 45 Blades: <input type="number" id="max45BladesInput" value="0"><br></span>
+    <span>Max Number of 40 Blades: <input type="number" id="max40BladesInput" value="0"><br></span>
+    <span>Max Number of 55 Blades: <input type="number" id="max55BladesInput" value="0"><br></span>
+
 
     <button onclick="saveProfile()">Save Profile</button>
-    <button onclick="deleteProfile()">Delete Profile</button><br><br>
-     <button onclick="calculate()">Load Profile</button><br><br>
+    <button onclick="deleteProfile()">Delete Profile</button><br>
+
+    Traps Allowed? <input type="checkbox" id="trapsInput" checked><br>
+    Blades Allowed? <input type="checkbox" id="bladesInput" checked><br><br>
+
     <p id="result"></p>
 
 
