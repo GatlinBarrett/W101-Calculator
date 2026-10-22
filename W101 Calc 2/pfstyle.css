@@ -43,7 +43,7 @@ button {
 .ice     { --c: #4fd1ff; --d: #0c2a36; --symbol: url('images/symbols/ice.png');     --char: url('images/characters/ice.png'); }
 .storm   { --c: #b06cff; --d: #24123a; --symbol: url('images/symbols/storm.png');   --char: url('images/characters/storm.png'); }
 .myth    { --c: #ffd23f; --d: #3a2f0a; --symbol: url('images/symbols/myth.png');    --char: url('images/characters/myth.png'); }
-.life    { --c: #4ade80; --d: #0c3018; --symbol: url('W101 Calc 2/Images/LifeSymbol.png');    --char: url('images/characters/life.png'); }
+.life    { --c: #4ade80; --d: #0c3018; --symbol: url('W101 Calc 2/Images/LifeSymbol.png');    --char: url('W101 Calc 2/Images/LifeSymbol.png'); }
 .death   { --c: #d946a8; --d: #3a0f2e; --symbol: url('images/symbols/death.png');   --char: url('images/characters/death.png'); }
 .balance { --c: #d4a24c; --d: #33260e; --symbol: url('images/symbols/balance.png'); --char: url('images/characters/balance.png'); }
 

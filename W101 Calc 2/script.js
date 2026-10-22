@@ -45,9 +45,7 @@ function addBlade() {
     // Add it to the existing container
     document.getElementById("bladeList").appendChild(bladeDiv);
 
-    blades.forEach(blade => {
-        console.log(blade.percent);
-    });
+    console.log(blade.id.percent)
 
     console.log(blades);
 }
@@ -261,10 +259,21 @@ function calculateDamage() {
     totalDamage = (baseDamageInput + enchantInput) * (1 + damagePercentInput) * (1 - ((resistInput / 100) - (pierceInput / 100)))
     console.log(totalDamage)
 
-    // if (totalDamage <= healthInput) {
-    //     if (trapsInput === true && bladesInput === true && ) {
+    if (totalDamage <= healthInput) {
+        if (trapsInput === true && bladesInput === true && ) {
+            trapCount++
+            
+        }
+    }
+}
 
-    //     }
-    // }
+let searchId = 2;
+
+let blade = blades.find(blade => blade.id === searchId);
+
+if (blade) {
+    console.log(blade.percent);
+} else {
+    console.log("Blade not found");
 }
 
