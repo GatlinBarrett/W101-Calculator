@@ -1,6 +1,63 @@
 
+const savedInputIds = [
+    "baseDamageInput",
+    "enchantInput",
+    "damagePercentInput",
+    "pierceInput",
+    "healthInput",
+    "resistInput"
+    
+];
+
+// Save numerical inputs whenever they change
+savedInputIds.forEach(id => {
+    const input = document.getElementById(id);
+
+    // Restore the previously saved value
+    const savedValue = localStorage.getItem(id);
+
+    if (savedValue !== null) {
+        input.value = savedValue;
+    }
+
+    // Save changes automatically
+    input.addEventListener("input", function () {
+        localStorage.setItem(id, input.value);
+    });
+});
+
+
+// Save and restore checkbox states
+const savedCheckboxIds = [
+    "bladesInput",
+    "trapsInput"
+];
+
+savedCheckboxIds.forEach(id => {
+    const checkbox = document.getElementById(id);
+
+    // Restore checkbox state
+    checkbox.checked = localStorage.getItem(id) === "true";
+
+    // Save whenever checked or unchecked
+    checkbox.addEventListener("change", function () {
+        localStorage.setItem(id, checkbox.checked);
+    });
+});
+
+
+
+
 let blades = [];
 let bladeNumber = 0;
+
+let traps = [];
+let trapNumber = 0;
+
+
+// ========================
+// BLADES
+// ========================
 
 function newBlade() {
     document.getElementById("bladeContainer").style.display = "block";
@@ -9,30 +66,31 @@ function newBlade() {
 function addBlade() {
     bladeNumber++;
 
-    let bladePercentInput = Number(
-        document.getElementById("bladePercentInput").value
-    );
-    let bladeAmountInput = Number(
-        document.getElementById("bladeAmountInput").value
-    );
-
     let blade = {
         id: bladeNumber,
-        percent: bladePercentInput,
-        maxAmount: bladeAmountInput
+        percent: Number(document.getElementById("bladePercentInput").value),
+        maxAmount: Number(document.getElementById("bladeAmountInput").value)
     };
 
     blades.push(blade);
 
-    // Create the blade's HTML element
+    displayBlade(blade);
+    saveBlades();
+
+    console.log(
+        [...blades].sort((a, b) => b.percent - a.percent)
+    );
+}
+
+function displayBlade(blade) {
     const bladeDiv = document.createElement("div");
+
     bladeDiv.id = "blade" + blade.id;
     bladeDiv.className = "bladeEntry";
 
     bladeDiv.textContent =
         `Blade ${blade.id}: ${blade.percent}% | Amount: ${blade.maxAmount} `;
 
-    // Create its remove button
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Remove Blade";
 
@@ -42,56 +100,28 @@ function addBlade() {
 
     bladeDiv.appendChild(deleteButton);
 
-    // Add it to the existing container
     document.getElementById("bladeList").appendChild(bladeDiv);
-
-    // Blades highest to lowest
-    let sortedBlades = [...blades]
-        .map(blade => ({ ...blade, type: "Blade" }))
-        .sort((a, b) => b.percent - a.percent);
-
-    console.log(sortedBlades);
 }
 
 function removeBlade(id) {
-    // Remove the selected blade from the array
     blades = blades.filter(blade => blade.id !== id);
 
-    // Renumber the remaining blades
+    // Renumber remaining blades
     blades.forEach((blade, index) => {
         blade.id = index + 1;
     });
 
-    // Reset the counter
     bladeNumber = blades.length;
 
-    // Remove all displayed blade entries
-    const bladeEntries = document.querySelectorAll(
-        "#bladeList .bladeEntry"
-    );
+    // Clear the displayed entries
+    document.getElementById("bladeList").innerHTML = "";
 
-    bladeEntries.forEach(entry => entry.remove());
-
-    // Recreate the remaining entries with their new IDs
+    // Recreate the remaining entries
     blades.forEach(blade => {
-        const bladeDiv = document.createElement("div");
-        bladeDiv.id = "blade" + blade.id;
-        bladeDiv.className = "bladeEntry";
-
-        bladeDiv.textContent =
-            `Blade ${blade.id}: ${blade.percent}% | Amount: ${blade.maxAmount} `;
-
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Remove Blade";
-
-        deleteButton.onclick = function () {
-            removeBlade(blade.id);
-        };
-
-        bladeDiv.appendChild(deleteButton);
-
-        document.getElementById("bladeList").appendChild(bladeDiv);
+        displayBlade(blade);
     });
+
+    saveBlades();
 
     console.log(blades);
 }
@@ -100,11 +130,14 @@ function cancelBlade() {
     document.getElementById("bladeContainer").style.display = "none";
 }
 
+function saveBlades() {
+    localStorage.setItem("blades", JSON.stringify(blades));
+}
 
 
-
-let traps = [];
-let trapNumber = 0;
+// ========================
+// TRAPS
+// ========================
 
 function newTrap() {
     document.getElementById("trapContainer").style.display = "block";
@@ -113,30 +146,31 @@ function newTrap() {
 function addTrap() {
     trapNumber++;
 
-    let trapPercentInput = Number(
-        document.getElementById("trapPercentInput").value
-    );
-    let trapAmountInput = Number(
-        document.getElementById("trapAmountInput").value
-    );
-
     let trap = {
         id: trapNumber,
-        percent: trapPercentInput,
-        maxAmount: trapAmountInput
+        percent: Number(document.getElementById("trapPercentInput").value),
+        maxAmount: Number(document.getElementById("trapAmountInput").value)
     };
 
     traps.push(trap);
 
-    // Create the trap's HTML element
+    displayTrap(trap);
+    saveTraps();
+
+    console.log(
+        [...traps].sort((a, b) => b.percent - a.percent)
+    );
+}
+
+function displayTrap(trap) {
     const trapDiv = document.createElement("div");
+
     trapDiv.id = "trap" + trap.id;
     trapDiv.className = "trapEntry";
 
     trapDiv.textContent =
         `Trap ${trap.id}: ${trap.percent}% | Amount: ${trap.maxAmount} `;
 
-    // Create its remove button
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Remove Trap";
 
@@ -146,62 +180,125 @@ function addTrap() {
 
     trapDiv.appendChild(deleteButton);
 
-    // Add it to the existing container
     document.getElementById("trapList").appendChild(trapDiv);
-
-    // Traps highest to lowest
-    let sortedTraps = [...traps]
-        .map(trap => ({ ...trap, type: "Trap" }))
-        .sort((a, b) => b.percent - a.percent);
-
-    console.log(sortedTraps)
 }
 
 function removeTrap(id) {
-    // Remove the selected trap from the array
     traps = traps.filter(trap => trap.id !== id);
 
-    // Renumber the remaining traps
+    // Renumber remaining traps
     traps.forEach((trap, index) => {
         trap.id = index + 1;
     });
 
-    // Reset the counter
     trapNumber = traps.length;
 
-    // Remove all displayed trap entries
-    const trapEntries = document.querySelectorAll(
-        "#trapList .trapEntry"
-    );
+    // Clear the displayed entries
+    document.getElementById("trapList").innerHTML = "";
 
-    trapEntries.forEach(entry => entry.remove());
-
-    // Recreate the remaining entries with their new IDs
+    // Recreate the remaining entries
     traps.forEach(trap => {
-        const trapDiv = document.createElement("div");
-        trapDiv.id = "trap" + trap.id;
-        trapDiv.className = "trapEntry";
-
-        trapDiv.textContent =
-            `Trap ${trap.id}: ${trap.percent}% | Amount: ${trap.maxAmount} `;
-
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Remove Trap";
-
-        deleteButton.onclick = function () {
-            removeTrap(trap.id);
-        };
-
-        trapDiv.appendChild(deleteButton);
-
-        document.getElementById("trapList").appendChild(trapDiv);
+        displayTrap(trap);
     });
+
+    saveTraps();
 
     console.log(traps);
 }
 
 function cancelTrap() {
     document.getElementById("trapContainer").style.display = "none";
+}
+
+function saveTraps() {
+    localStorage.setItem("traps", JSON.stringify(traps));
+}
+
+
+// ========================
+// LOAD SAVED DATA
+// ========================
+
+function loadBladesAndTraps() {
+    // Restore saved blades
+    const savedBlades = localStorage.getItem("blades");
+
+    if (savedBlades !== null) {
+        blades = JSON.parse(savedBlades);
+    }
+
+    // Restore saved traps
+    const savedTraps = localStorage.getItem("traps");
+
+    if (savedTraps !== null) {
+        traps = JSON.parse(savedTraps);
+    }
+
+    // Restore counters using the highest existing ID
+    bladeNumber = blades.reduce(
+        (highest, blade) => Math.max(highest, blade.id), 0
+    );
+
+    trapNumber = traps.reduce(
+        (highest, trap) => Math.max(highest, trap.id), 0
+    );
+
+    // Recreate the saved blade entries
+    blades.forEach(blade => {
+        displayBlade(blade);
+    });
+
+    // Recreate the saved trap entries
+    traps.forEach(trap => {
+        displayTrap(trap);
+    });
+
+    console.log("Loaded blades:", blades);
+    console.log("Loaded traps:", traps);
+}
+
+
+// Run when this script reaches the bottom
+// after the HTML elements have been created
+loadBladesAndTraps();
+
+
+function displayBlade(blade) {
+    const bladeDiv = document.createElement("div");
+    bladeDiv.id = "blade" + blade.id;
+    bladeDiv.className = "bladeEntry";
+
+    bladeDiv.textContent =
+        `Blade ${blade.id}: ${blade.percent}% | Amount: ${blade.maxAmount} `;
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Remove Blade";
+
+    deleteButton.onclick = function () {
+        removeBlade(blade.id);
+    };
+
+    bladeDiv.appendChild(deleteButton);
+    document.getElementById("bladeList").appendChild(bladeDiv);
+}
+
+function displayTrap(trap) {
+    const trapDiv = document.createElement("div");
+    trapDiv.id = "trap" + trap.id;
+    trapDiv.className = "trapEntry";
+
+    trapDiv.textContent =
+        `Trap ${trap.id}: ${trap.percent}% | Amount: ${trap.maxAmount} `;
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Remove Trap";
+
+    deleteButton.onclick = function () {
+        removeTrap(trap.id);
+    };
+
+    trapDiv.appendChild(deleteButton);
+    document.getElementById("trapList").appendChild(trapDiv);
 }
 
 
@@ -246,23 +343,10 @@ function toggleTraps() {
     }
 }
 
-// Blades highest to lowest
-let sortedBlades = [...blades]
-    .map(blade => ({ ...blade, type: "Blade" }))
-    .sort((a, b) => b.percent - a.percent);
-
-console.log(sortedBlades);
-
-// Traps highest to lowest
-let sortedTraps = [...traps]
-    .map(trap => ({ ...trap, type: "Trap" }))
-    .sort((a, b) => b.percent - a.percent);
-
-console.log(sortedTraps)
-
 const container = document.getElementById("percentUsed");
 
 function calculateDamage() {
+    container.innerHTML = "";
     let baseDamageInput = Number(document.getElementById('baseDamageInput').value);
     let enchantInput = Number(document.getElementById('enchantInput').value);
     let damagePercentInput = Number(document.getElementById('damagePercentInput').value);

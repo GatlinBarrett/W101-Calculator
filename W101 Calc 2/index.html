@@ -42,30 +42,33 @@
             </div>
         </div>
 
-        <div id="chooseBlade" class="chooseBlade" style="display: block;">
-            Choose a Blade:
-            <button onclick="newBlade()">New Blade</button>
-        </div>
+        <div class="chooseModifier">
+            <div id="chooseBlade" class="chooseBlade" style="display: block;">
+                Choose a Blade:
+                <button onclick="newBlade()">New Blade</button>
 
-        <div class="bladeContainer" id="bladeContainer" style="display: none;">
-            <span>Blade Percent: <input type="number" id="bladePercentInput" value="0">%<br></span>
-            <span>Max Blade Amount: <input type="number" id="bladeAmountInput" value="0"><br></span>
-            <button onclick="addBlade()">Add Blade</button>
-            <button onclick="cancelBlade()">Cancel</button>
-            <div id="bladeList"></div>
-        </div><br>
+                <div class="bladeContainer" id="bladeContainer" style="display: none;">
+                    <span>Blade Percent: <input type="number" id="bladePercentInput" value="0">%<br></span>
+                    <span>Max Blade Amount: <input type="number" id="bladeAmountInput" value="0"><br></span>
+                    <button onclick="addBlade()">Add Blade</button>
+                    <button onclick="cancelBlade()">Close</button>
+                </div>
+                <div id="bladeList"></div>
+            </div><br>
 
-        <div id="chooseTrap" class="chooseTrap" style="display: block;">
-            Choose a Trap:
-            <button onclick="newTrap()">New Trap</button>
-        </div>
 
-        <div class="trapContainer" id="trapContainer" style="display: none;">
-            <span>Trap Percent: <input type="number" id="trapPercentInput" value="0">%<br></span>
-            <span>Max Trap Amount: <input type="number" id="trapAmountInput" value="0"><br></span>
-            <button onclick="addTrap()">Add Trap</button>
-            <button onclick="cancelTrap()">Cancel</button>
-            <div id="trapList"></div>
+            <div id="chooseTrap" class="chooseTrap" style="display: block;">
+                Choose a Trap:
+                <button onclick="newTrap()">New Trap</button>
+
+                <div class="trapContainer" id="trapContainer" style="display: none;">
+                    <span>Trap Percent: <input type="number" id="trapPercentInput" value="0">%<br></span>
+                    <span>Max Trap Amount: <input type="number" id="trapAmountInput" value="0"><br></span>
+                    <button onclick="addTrap()">Add Trap</button>
+                    <button onclick="cancelTrap()">Close</button>
+                </div>
+                <div id="trapList"></div>
+            </div>
         </div><br>
 
 
