@@ -45,9 +45,12 @@ function addBlade() {
     // Add it to the existing container
     document.getElementById("bladeList").appendChild(bladeDiv);
 
-    console.log(blade.id.percent)
+    // Blades highest to lowest
+    let sortedBlades = [...blades]
+        .map(blade => ({ ...blade, type: "Blade" }))
+        .sort((a, b) => b.percent - a.percent);
 
-    console.log(blades);
+    console.log(sortedBlades);
 }
 
 function removeBlade(id) {
@@ -146,7 +149,12 @@ function addTrap() {
     // Add it to the existing container
     document.getElementById("trapList").appendChild(trapDiv);
 
-    console.log(traps);
+    // Traps highest to lowest
+    let sortedTraps = [...traps]
+        .map(trap => ({ ...trap, type: "Trap" }))
+        .sort((a, b) => b.percent - a.percent);
+
+    console.log(sortedTraps)
 }
 
 function removeTrap(id) {
@@ -208,9 +216,6 @@ function toggleBlades() {
         // Reset the blade counter
         bladeNumber = 0;
 
-        // Remove all displayed trap entries
-        document.getElementById("bladeList").innerHTML = "";
-
         // Hide the trap creation form
         document.getElementById("chooseBlade").style.display = "none";
         document.getElementById("bladeContainer").style.display = "none";
@@ -231,9 +236,6 @@ function toggleTraps() {
         // Reset the trap counter
         trapNumber = 0;
 
-        // Remove all displayed trap entries
-        document.getElementById("trapList").innerHTML = "";
-
         // Hide the trap creation form
         document.getElementById("chooseTrap").style.display = "none";
         document.getElementById("trapContainer").style.display = "none";
@@ -244,7 +246,21 @@ function toggleTraps() {
     }
 }
 
+// Blades highest to lowest
+let sortedBlades = [...blades]
+    .map(blade => ({ ...blade, type: "Blade" }))
+    .sort((a, b) => b.percent - a.percent);
 
+console.log(sortedBlades);
+
+// Traps highest to lowest
+let sortedTraps = [...traps]
+    .map(trap => ({ ...trap, type: "Trap" }))
+    .sort((a, b) => b.percent - a.percent);
+
+console.log(sortedTraps)
+
+const container = document.getElementById("percentUsed");
 
 function calculateDamage() {
     let baseDamageInput = Number(document.getElementById('baseDamageInput').value);
@@ -256,24 +272,266 @@ function calculateDamage() {
     let healthInput = Number(document.getElementById('healthInput').value);
     let resistInput = Number(document.getElementById('resistInput').value);
 
-    totalDamage = (baseDamageInput + enchantInput) * (1 + damagePercentInput) * (1 - ((resistInput / 100) - (pierceInput / 100)))
+    totalDamage = (baseDamageInput + enchantInput) * (1 + (damagePercentInput / 100)) * (1 - ((resistInput / 100) - (pierceInput / 100)))
     console.log(totalDamage)
+    let bladeDamage = totalDamage
+    //
 
-    if (totalDamage <= healthInput) {
-        if (trapsInput === true && bladesInput === true && ) {
-            trapCount++
-            
+    // CALCULATE TOTAL DAMAGE OF BLADES AND TRAPS
+
+    //
+    if (trapsInput === true && bladesInput === true) {
+        // Blades highest to lowest
+        let sortedBlades = [...blades]
+            .map(blade => ({ ...blade, type: "Blade" }))
+            .sort((a, b) => b.percent - a.percent);
+
+        console.log(sortedBlades);
+
+        // Traps highest to lowest
+        let sortedTraps = [...traps]
+            .map(trap => ({ ...trap, type: "Trap" }))
+            .sort((a, b) => b.percent - a.percent);
+
+        console.log(sortedTraps)
+
+        // Sort traps and blades from highest to lowest percent
+        let allModifiers = [
+            ...sortedBlades.map(blade => ({ ...blade })),
+            ...sortedTraps.map(trap => ({ ...trap }))
+        ];
+
+        allModifiers.sort((a, b) => b.percent - a.percent);
+
+        console.log(allModifiers);
+        for (let modifier of allModifiers) {
+            let totalAmount = 1
+            // Stop if damage has already reached the target
+            if (totalDamage >= healthInput) {
+                break;
+            }
+            // Cycle through each blade/trap
+            let percent = modifier.percent;
+            let maxAmount = modifier.maxAmount;
+            let id = modifier.id;
+            let type = modifier.type;
+
+            // start multiplying the percentages into the
+            // damage until it meets/exceeds the health amount
+            if (totalAmount === 1) {
+                console.log(totalDamage)
+                totalDamage *= (1 + (percent / 100));
+                console.log(totalDamage)
+            }
+            while (totalAmount < maxAmount && totalDamage <= healthInput) {
+                totalAmount++
+                totalDamage *= (1 + (percent / 100));
+                console.log(`${type} ${id}: ${percent}%`);
+                console.log("Total damage:", totalDamage)
+                console.log('Amount used: ' + totalAmount)
+                console.log('Blade Damage: ' + bladeDamage)
+
+                if (type === "Blade") {
+                    bladeDamage *= (1 + (percent / 100))
+                    console.log('Blade Damage: ' + bladeDamage)
+                }
+
+                // Create a new div
+                let percentDiv = document.createElement("div");
+
+                // Add content to the div
+                percentDiv.textContent = percent + '% ' + type + ': x' + totalAmount;
+
+                // Give it a class for styling
+                percentDiv.classList.add("percentages");
+
+                // Put it inside the container
+                container.appendChild(percentDiv);
+
+                if (totalDamage >= healthInput) {
+                    break
+                }
+
+            }
+
+            // Only Blade Damage
+            if (type === "Blade") {
+                bladeDamage *= (1 + (percent / 100))
+                console.log('Blade Damage: ' + bladeDamage)
+            }
+
+
+            if (totalAmount === 1) {
+                // Create a new div
+                let percentDiv = document.createElement("div");
+
+                // Add content to the div
+                percentDiv.textContent = percent + '% ' + type + ': x' + totalAmount;
+
+                // Give it a class for styling
+                percentDiv.classList.add("percentages");
+
+                // Put it inside the container
+                container.appendChild(percentDiv);
+            }
+
+            if (totalDamage >= healthInput) {
+                break
+            }
+
+
+
+            console.log(`${type} ${id}: ${percent}%`);
+            console.log('totalDamage: ' + totalDamage.toFixed(2))
         }
     }
+
+    //
+
+    // CALCULATE TOTAL DAMAGE OF BLADES
+
+    //
+
+    if (trapsInput === false && bladesInput === true) {
+        for (let bladeModifier of sortedBlades) {
+            let totalAmount = 1
+            // Stop if damage has already reached the target
+            if (totalDamage >= healthInput) {
+                break;
+            }
+            // Cycle through each blade
+            let percent = bladeModifier.percent;
+            let maxAmount = bladeModifier.maxAmount;
+            let id = bladeModifier.id;
+            let type = bladeModifier.type;
+
+            // start multiplying the percentages into the
+            // damage until it meets/exceeds the health amount
+            while (totalAmount < maxAmount) {
+                totalAmount++
+                totalDamage *= (1 + (percent / 100));
+                console.log(`${type} ${id}: ${percent}%`);
+                console.log("Total damage:", totalDamage)
+                console.log('Amount used: ' + totalAmount)
+
+                // Create a new div
+                let percentDiv = document.createElement("div");
+
+                // Add content to the div
+                percentDiv.textContent = percent + '% ' + type + ': x' + totalAmount;
+
+                // Give it a class for styling
+                percentDiv.classList.add("percentages");
+
+                // Put it inside the container
+                container.appendChild(percentDiv);
+
+                if (totalDamage >= healthInput) {
+                    break
+                }
+
+            }
+
+            if (totalDamage >= healthInput) {
+                break
+            }
+            totalDamage *= (1 + (percent / 100));
+            if (totalAmount === 1) {
+                // Create a new div
+                let percentDiv = document.createElement("div");
+
+                // Add content to the div
+                percentDiv.textContent = percent + '% ' + type + ': x' + totalAmount;
+
+                // Give it a class for styling
+                percentDiv.classList.add("percentages");
+
+                // Put it inside the container
+                container.appendChild(percentDiv);
+            }
+
+
+
+            console.log(`${type} ${id}: ${percent}%`);
+            console.log('totalDamage: ' + totalDamage.toFixed(2))
+        }
+    }
+
+    //
+
+    // CALCULATE TOTAL DAMAGE OF TRAPS
+
+    //
+
+    if (trapsInput === true && bladesInput === false) {
+        for (let trapModifier of sortedTraps) {
+            let totalAmount = 1
+            // Stop if damage has already reached the target
+            if (totalDamage >= healthInput) {
+                break;
+            }
+            // Cycle through each trap
+            let percent = trapModifier.percent;
+            let maxAmount = trapModifier.maxAmount;
+            let id = trapModifier.id;
+            let type = trapModifier.type;
+
+            // start multiplying the percentages into the
+            // damage until it meets/exceeds the health amount
+            while (totalAmount < maxAmount) {
+                totalAmount++
+                totalDamage *= (1 + (percent / 100));
+                console.log(`${type} ${id}: ${percent}%`);
+                console.log("Total damage:", totalDamage)
+                console.log('Amount used: ' + totalAmount)
+
+                // Create a new div
+                let percentDiv = document.createElement("div");
+
+                // Add content to the div
+                percentDiv.textContent = percent + '% ' + type + ': x' + totalAmount;
+
+                // Give it a class for styling
+                percentDiv.classList.add("percentages");
+
+                // Put it inside the container
+                container.appendChild(percentDiv);
+
+                if (totalDamage >= healthInput) {
+                    break
+                }
+
+            }
+
+            if (totalDamage >= healthInput) {
+                break
+            }
+            totalDamage *= (1 + (percent / 100));
+            if (totalAmount === 1) {
+                // Create a new div
+                let percentDiv = document.createElement("div");
+
+                // Add content to the div
+                percentDiv.textContent = percent + '% ' + type + ': x' + totalAmount;
+
+                // Give it a class for styling
+                percentDiv.classList.add("percentages");
+
+                // Put it inside the container
+                container.appendChild(percentDiv);
+            }
+
+
+
+            console.log(`${type} ${id}: ${percent}%`);
+            console.log('totalDamage: ' + totalDamage.toFixed(2))
+
+        }
+    }
+
+    document.getElementById("totalDamage").textContent = 'Total Damage: ' + totalDamage.toFixed(2);
+    if (bladesInput === true && trapsInput === true) {
+        document.getElementById("bladeDamage").textContent = 'Only Blade Damage: ' + bladeDamage.toFixed(2) + ' (Not Excluding Resist)';
+    }
+
 }
-
-let searchId = 2;
-
-let blade = blades.find(blade => blade.id === searchId);
-
-if (blade) {
-    console.log(blade.percent);
-} else {
-    console.log("Blade not found");
-}
-

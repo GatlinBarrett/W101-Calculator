@@ -23,8 +23,7 @@
                         value="0"><br></span>
             </div>
             <div class="inputWidth">
-                <span class="enchant">Enchant: <br><input type="number" id="enchantInput"
-                        value="0"><br></span>
+                <span class="enchant">Enchant: <br><input type="number" id="enchantInput" value="0"><br></span>
             </div>
             <div class="inputWidth">
                 <span class="basePercentDamage">Base Damage Percent: <br><input type="number" id="damagePercentInput"
@@ -35,8 +34,10 @@
             </div>
             <div class="inputWidth">
                 <div class="allowed">
-                    <span class="inputWidth">Traps Allowed? <input type="checkbox" id="trapsInput" onchange="toggleTraps()" checked></span>
-                    <span class="inputWidth">Blades Allowed? <input type="checkbox" id="bladesInput" onchange="toggleBlades()" checked></span>
+                    <span class="inputWidth">Traps Allowed? <input type="checkbox" id="trapsInput"
+                            onchange="toggleTraps()" checked></span>
+                    <span class="inputWidth">Blades Allowed? <input type="checkbox" id="bladesInput"
+                            onchange="toggleBlades()" checked></span>
                 </div>
             </div>
         </div>
@@ -75,7 +76,9 @@
         </div>
 
         <button onclick="calculateDamage()">Calculate</button>
+        <div id="percentUsed"></div>
         <div id="totalDamage"></div>
+        <div id="bladeDamage"></div>
     </div>
 
 
