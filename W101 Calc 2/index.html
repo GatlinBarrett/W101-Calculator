@@ -10,42 +10,73 @@
 </head>
 
 <body>
-    <h1>WELCOME TO THE SPIRAL</h1>
+    <h1 class="title">Welcome, to the Spiral!</h1>
 
-    <span>Base Spell Damage: <input type="number" id="baseDamageInput" value="0"><br></span>
-    <span>Base Damage Percent: <input type="number" id="damagePercentInput" value="0">%<br></span>
-    <span>Pierce: <input type="number" id="pierceInput" value="0">%<br></span>
-    Traps Allowed? <input type="checkbox" id="trapsInput" checked><br>
-    Blades Allowed? <input type="checkbox" id="bladesInput" checked><br><br>
+    <div class="calculatorContainer">
+        <button class="profile">
+            <a href="PFSelect.html">Profiles</a>
+        </button>:
+        <div class="profileName"></div>
+        <div class="inputContainer">
+            <div class="inputWidth">
+                <span class="baseSpellDamage">Base Spell Damage: <br><input type="number" id="baseDamageInput"
+                        value="0"><br></span>
+            </div>
+            <div class="inputWidth">
+                <span class="enchant">Enchant: <br><input type="number" id="enchantInput"
+                        value="0"><br></span>
+            </div>
+            <div class="inputWidth">
+                <span class="basePercentDamage">Base Damage Percent: <br><input type="number" id="damagePercentInput"
+                        value="0">%<br></span>
+            </div>
+            <div class="inputWidth">
+                <span class="pierce">Pierce: <br><input type="number" id="pierceInput" value="0">%<br></span>
+            </div>
+            <div class="inputWidth">
+                <div class="allowed">
+                    <span class="inputWidth">Traps Allowed? <input type="checkbox" id="trapsInput" onchange="toggleTraps()" checked></span>
+                    <span class="inputWidth">Blades Allowed? <input type="checkbox" id="bladesInput" onchange="toggleBlades()" checked></span>
+                </div>
+            </div>
+        </div>
 
-    Choose a Blade:
-    <button onclick="newBlade()">New Blade</button><br>
+        <div id="chooseBlade" class="chooseBlade" style="display: block;">
+            Choose a Blade:
+            <button onclick="newBlade()">New Blade</button>
+        </div>
 
-    <div id="bladeContainer" style="display: none;">
-        <span>Blade Percent: <input type="number" id="bladePercentInput" value="0">%<br></span>
-        <span>Max Blade Amount: <input type="number" id="bladeAmountInput" value="0"><br></span>
-        <button onclick="addBlade()">Add Blade</button>
-        <button onclick="cancelBlade()">Cancel</button>
-        <div id="bladeList"></div>
-    </div><br>
+        <div class="bladeContainer" id="bladeContainer" style="display: none;">
+            <span>Blade Percent: <input type="number" id="bladePercentInput" value="0">%<br></span>
+            <span>Max Blade Amount: <input type="number" id="bladeAmountInput" value="0"><br></span>
+            <button onclick="addBlade()">Add Blade</button>
+            <button onclick="cancelBlade()">Cancel</button>
+            <div id="bladeList"></div>
+        </div><br>
 
-    Choose a Trap:
-    <button onclick="newTrap()">New Trap</button><br>
+        <div id="chooseTrap" class="chooseTrap" style="display: block;">
+            Choose a Trap:
+            <button onclick="newTrap()">New Trap</button>
+        </div>
 
-    <div id="trapContainer" style="display: none;">
-        <span>Trap Percent: <input type="number" id="trapPercentInput" value="0">%<br></span>
-        <span>Max Trap Amount: <input type="number" id="trapAmountInput" value="0"><br></span>
-        <button onclick="addTrap()">Add Trap</button>
-        <div id="trapList"></div>
-        <button onclick="removeTrap()">Remove Trap</button><br>
-    </div><br>
-
-    <span>Enemy Health: <input type="number" id="healthInput" value="0"><br></span>
-    <span>Enemy Resist: <input type="number" id="resistInput" value="0">%<br></span><br>
+        <div class="trapContainer" id="trapContainer" style="display: none;">
+            <span>Trap Percent: <input type="number" id="trapPercentInput" value="0">%<br></span>
+            <span>Max Trap Amount: <input type="number" id="trapAmountInput" value="0"><br></span>
+            <button onclick="addTrap()">Add Trap</button>
+            <button onclick="cancelTrap()">Cancel</button>
+            <div id="trapList"></div>
+        </div><br>
 
 
-    <button onclick="calculateDamage()">Calculate</button>
 
+        <div class="enemyContainer">
+            <span>Enemy Health: <input type="number" id="healthInput" value="0">HP<br></span>
+            <span>Enemy Resist: <input type="number" id="resistInput" value="0">%<br></span><br>
+        </div>
+
+        <button onclick="calculateDamage()">Calculate</button>
+        <div id="totalDamage"></div>
+    </div>
 
 
 

@@ -1,0 +1,135 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: #1a1c2b;
+    font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+button {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 10;
+}
+
+/* ---------- Layout ---------- */
+
+.profiles {
+    --off: 26.8vh;   /* sideways lean top to bottom (75°); the script updates this */
+    --a: 15deg;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--off) / -2);
+    right: calc(var(--off) / -2);
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: 100%;
+}
+
+.profile {
+    position: relative;
+    display: block;
+    pointer-events: none;
+    text-decoration: none;
+}
+
+/* ---------- School colors and images ---------- */
+
+.fire    { --c: #ff5a1f; --d: #3a1306; --symbol: url('images/symbols/fire.png');    --char: url('images/characters/fire.png'); }
+.ice     { --c: #4fd1ff; --d: #0c2a36; --symbol: url('images/symbols/ice.png');     --char: url('images/characters/ice.png'); }
+.storm   { --c: #b06cff; --d: #24123a; --symbol: url('images/symbols/storm.png');   --char: url('images/characters/storm.png'); }
+.myth    { --c: #ffd23f; --d: #3a2f0a; --symbol: url('images/symbols/myth.png');    --char: url('images/characters/myth.png'); }
+.life    { --c: #4ade80; --d: #0c3018; --symbol: url('W101 Calc 2/Images/LifeSymbol.png');    --char: url('images/characters/life.png'); }
+.death   { --c: #d946a8; --d: #3a0f2e; --symbol: url('images/symbols/death.png');   --char: url('images/characters/death.png'); }
+.balance { --c: #d4a24c; --d: #33260e; --symbol: url('images/symbols/balance.png'); --char: url('images/characters/balance.png'); }
+
+/* ---------- The slanted slice ---------- */
+
+.panel {
+    position: absolute;
+    inset: 0;
+    pointer-events: auto;
+    background: linear-gradient(to top, var(--c), var(--d));
+    border-left: 3px solid var(--c);
+    transform: skewX(calc(var(--a) * -1));
+    filter: brightness(0.5);
+    transition: filter 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* ---------- Contents (counter-skewed so they stand upright) ---------- */
+
+.symbol {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    top: 10%;
+    bottom: 30%;
+    background: var(--c);
+    -webkit-mask: var(--symbol) center / contain no-repeat;
+            mask: var(--symbol) center / contain no-repeat;
+    opacity: 0.4;
+    transform: skewX(var(--a));
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+
+.character {
+    position: absolute;
+    left: 50%;
+    bottom: 4vh;
+    width: 220%;
+    height: 86%;
+    background: var(--char) center bottom / contain no-repeat;
+    filter: drop-shadow(0 0 18px var(--c));
+    opacity: 0;
+    transform: translateX(-50%) skewX(var(--a)) translateY(40px) scale(0.9);
+    transform-origin: center bottom;
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.name {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 3vh;
+    display: flex;
+    justify-content: center;
+    transform: skewX(var(--a));
+    pointer-events: none;
+}
+
+.name span {
+    display: inline-block;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: clamp(0.9rem, 2.4vh, 1.5rem);
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 10px var(--c), 0 2px 4px #000;
+}
+
+/* ---------- Hover ---------- */
+
+.panel:hover {
+    z-index: 5;
+    filter: brightness(1.1);
+    box-shadow: inset 0 0 70px var(--c);
+}
+
+.panel:hover .symbol { opacity: 0.15; }
+
+.panel:hover .character {
+    opacity: 1;
+    transform: translateX(-50%) skewX(var(--a)) translateY(0) scale(1.08);
+}
+
+.profiles:hover .panel:not(:hover) {
+    filter: brightness(0.25);
+}
