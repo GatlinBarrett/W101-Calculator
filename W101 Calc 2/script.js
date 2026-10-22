@@ -6,7 +6,7 @@ const savedInputIds = [
     "pierceInput",
     "healthInput",
     "resistInput"
-    
+
 ];
 
 // Save numerical inputs whenever they change
@@ -344,21 +344,24 @@ function toggleTraps() {
 }
 
 const container = document.getElementById("percentUsed");
+let bladeDamage = 0
+let resistInput = 0
+let pierceInput = 0
 
 function calculateDamage() {
     container.innerHTML = "";
     let baseDamageInput = Number(document.getElementById('baseDamageInput').value);
     let enchantInput = Number(document.getElementById('enchantInput').value);
     let damagePercentInput = Number(document.getElementById('damagePercentInput').value);
-    let pierceInput = Number(document.getElementById('pierceInput').value);
+    pierceInput = Number(document.getElementById('pierceInput').value);
     let trapsInput = document.getElementById('trapsInput').checked;
     let bladesInput = document.getElementById('bladesInput').checked;
     let healthInput = Number(document.getElementById('healthInput').value);
-    let resistInput = Number(document.getElementById('resistInput').value);
+    resistInput = Number(document.getElementById('resistInput').value);
 
     totalDamage = (baseDamageInput + enchantInput) * (1 + (damagePercentInput / 100)) * (1 - ((resistInput / 100) - (pierceInput / 100)))
     console.log(totalDamage)
-    let bladeDamage = totalDamage
+    bladeDamage = totalDamage
     //
 
     // CALCULATE TOTAL DAMAGE OF BLADES AND TRAPS
@@ -615,7 +618,35 @@ function calculateDamage() {
 
     document.getElementById("totalDamage").textContent = 'Total Damage: ' + totalDamage.toFixed(2);
     if (bladesInput === true && trapsInput === true) {
-        document.getElementById("bladeDamage").textContent = 'Only Blade Damage: ' + bladeDamage.toFixed(2) + ' (Not Excluding Resist)';
-    }
+        document.getElementById("bladeDamageOnly").innerHTML =
+            'Only Blade Damage: ' + bladeDamage.toFixed(2) + ' ' +
+            '<input type="number" id="bladeResistInput" ' +
+            'placeholder="2nd Resist" style="width: 100px;" ' +
+            'onchange="updateBladeResist()">';
 
+    }
+}
+function updateBladeResist() {
+    let bladeResist = Number(
+        document.getElementById("bladeResistInput").value
+    );
+    console.log(bladeResist);
+
+    // totalDamage = (baseDamageInput + enchantInput) * (1 + (damagePercentInput / 100)) *
+    //     (1 - ((resistInput / 100) - (pierceInput / 100)))
+
+    console.log(bladeDamage)
+
+    bladeDamage *= ((1 - ((bladeResist / 100) - (pierceInput / 100)))
+        / (1 - ((resistInput / 100) - (pierceInput / 100))))
+    console.log(bladeDamage)
+
+    let currentResist = document.getElementById("bladeResistInput")?.value ?? "";
+
+    document.getElementById("bladeDamageOnly").innerHTML =
+        'Only Blade Damage: ' + bladeDamage.toFixed(2) + ' ' +
+        '<input type="number" id="bladeResistInput" ' +
+        'placeholder="2nd Resist" style="width: 100px;" ' +
+        'onchange="updateBladeResist()" ' +
+        'value="' + currentResist + '">';
 }
