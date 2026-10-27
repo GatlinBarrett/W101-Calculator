@@ -4,3 +4,330 @@ body {
     line-height: 2;
     font-size: 18px;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+button {
+    font-size: 16px;
+}
+
+input {
+    border-radius: 4px;
+    width: 100px;
+    height: 20px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.title {
+    text-align: center;
+    font-size: 60px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    font-family: Roboto;
+
+}
+
+.calculatorContainer {
+    text-align: center;
+}
+
+.wizardName {
+    width: 200px;
+}
+
+
+#wizardList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.newWizard {
+    border: 1px solid #f2f2f2;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.newWizard>.wizardName {
+    margin-bottom: 8px;
+}
+
+.newWizard .inputContainer {
+    margin-bottom: 8px;
+}
+
+.newBlade {
+    cursor: grab;
+    flex-shrink: 0;
+}
+
+.newBlade:active {
+    cursor: grabbing;
+}
+
+
+.inputContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 1px solid #f2f2f2;
+    padding: 8px;
+    margin-bottom: 20px;
+}
+
+.inputWidth {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.profile {
+    font-size: 20px;
+}
+
+
+
+.chooseModifier {
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.percentWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+.percentWrapper span {
+    font-size: 24px;
+}
+
+.chooseBlade,
+.chooseTrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+
+/* Blade and trap outer containers */
+.bladeContainer,
+.trapContainer {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #f2f2f2;
+    padding: 8px;
+    min-height: 120px;
+    box-sizing: border-box;
+}
+
+/* Grid of boxes */
+#bladeList,
+#trapList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 92px);
+    gap: 8px;
+    justify-content: start;
+}
+
+.newBlade,
+.newTrap {
+    width: 92px;
+    height: 92px;
+    box-sizing: border-box;
+    border: 1px solid #f2f2f2;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 4px;
+    font-size: 18px;
+}
+
+.enableCheck {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
+.bladePercentInput,
+.trapPercentInput {
+    width: 48px;
+    height: 32px;
+    box-sizing: border-box;
+    font-size: 24px;
+    margin: 0;
+}
+
+.percentWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+.percentWrapper span {
+    font-size: 24px;
+}
+
+.delete {
+    position: absolute;
+    bottom: 2px;
+    font-size: 13px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: white;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#bladeResistInput {
+    font-size: 16px;
+}
+
+.multiply {
+    position: relative;
+    top: 16px;
+    padding: 8px;
+}
+
+#enemyList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 8px 0;
+    width: 100%;
+    min-height: 120px;
+}
+
+.newEnemy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #f2f2f2;
+    box-sizing: border-box;
+}
+
+.enemyNameInput {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+
+    color: #f2f2f2;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #f2f2f2;
+    border-radius: 0;
+
+    outline: none;
+    text-align: center;
+}
+
+.enemyNameInput::placeholder {
+    color: #f2f2f2;
+    opacity: 0.7;
+}
+
+.newEnemy label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.enemyRow {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 8px;
+    width: fit-content;
+}
+
+
+
+.enemyTrapDropZone {
+    width: auto;
+    min-width: 112px;
+    min-height: 120px;
+    box-sizing: border-box;
+    border: 1px dashed #f2f2f2;
+    padding: 8px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 8px;
+}
+
+.enemyTrapDropZone.dragOver {
+    background-color: #493052;
+    border-color: white;
+}
+
+.enemyTrapDropZone .newTrap {
+    width: 92px;
+    height: 92px;
+    flex-shrink: 0;
+}
+
+
+.dropHint {
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+
+/* Traps keep their original square appearance */
+.newTrap {
+    flex-shrink: 0;
+}
+
+/* Optional: show that traps can be dragged */
+.newTrap {
+    cursor: grab;
+}
+
+.newTrap:active {
+    cursor: grabbing;
+}
+
+.assignedTrap {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 4px;
+    border: 1px solid #f2f2f2;
+    text-align: center;
+}

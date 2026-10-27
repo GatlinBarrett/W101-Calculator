@@ -1,78 +1,407 @@
+* { box-sizing: border-box; }
+:root { color-scheme: dark; font-family: Arial, Helvetica, sans-serif; }
+body { margin: 0; padding: 24px; background: #291530; color: #f2f2f2; line-height: 1.45; font-size: 16px; }
+button, input { font: inherit; }
+button { padding: 7px 12px; color: #f2f2f2; background: #4b2b58; border: 1px solid #9c7ba8; border-radius: 6px; cursor: pointer; }
+button:hover { background: #60396e; }
+input[type="number"], input[type="text"] { min-width: 0; padding: 5px 7px; border: 1px solid #8f7599; border-radius: 4px; background: #1d1022; color: #fff; }
+input[type="checkbox"] { width: 17px; height: 17px; margin: 0; accent-color: #4da3ff; cursor: pointer; }
+.title { margin: 0; text-align: center; font-size: clamp(32px, 5vw, 54px); }
+.subtitle { margin: 6px auto 28px; max-width: 760px; text-align: center; color: #d0bfd6; }
+.calculatorContainer { width: min(1500px, 100%); margin: 0 auto; }
+.section { margin-bottom: 24px; padding: 16px; border: 1px solid #684a73; border-radius: 10px; background: rgba(20,10,24,.28); }
+.sectionHeading, .calculateBar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+h2 { margin: 0; font-size: 22px; } h3 { margin: 0 0 10px; font-size: 18px; }
+.helpText { margin: 8px 0 12px; color: #cdbdd2; font-size: 14px; }
+.wizardList { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
+.newWizard { padding: 12px; border: 1px solid #886b92; border-radius: 8px; background: rgba(67,39,76,.35); }
+.wizardTop { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.wizardName { width: min(300px,100%); font-size: 19px; font-weight: 700; }
+.wizardNumber { color: #cdbdd2; white-space: nowrap; }
+.inputContainer { display: grid; grid-template-columns: repeat(auto-fit,minmax(130px,1fr)); gap: 10px; margin-bottom: 12px; }
+.inputWidth { display: flex; flex-direction: column; gap: 5px; color: #e6dce9; }
+.inputWidth input { width: 100%; }
+.bladeDropZone, .enemyTrapDropZone, .templateContainer { min-height: 112px; padding: 10px; border: 1px dashed #9b7ca5; border-radius: 7px; }
+.bladeDropZone, .enemyTrapDropZone { display: flex; align-items: flex-start; align-content: flex-start; flex-wrap: wrap; gap: 8px; }
+.dropLabel { width: 100%; color: #cdbdd2; font-size: 13px; }
+.dragOver { border-color: #f4d6ff !important; background: rgba(181,124,204,.18); }
+.chooseModifier { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.modifierPanel { min-width: 0; }
+.templateContainer { margin-top: 8px; border-style: solid; }
+.templateList { display: grid; grid-template-columns: repeat(auto-fill,minmax(92px,1fr)); gap: 8px; }
+.modifierCard { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; width: 104px; min-height: 90px; padding: 8px 5px 25px; border: 1px solid #9b7ca5; border-radius: 7px; background: #38213f; }
+.modifierCard[draggable="true"] { cursor: grab; } .modifierCard.dragging { opacity: .45; }
+.modifierPercent { width: 62px; text-align: center; font-size: 20px; }
+.modifierCaption { color: #d8c7df; font-size: 12px; }
+.deleteButton { position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); padding: 1px 5px; border: 0; background: transparent; color: #ffcbcb; font-size: 12px; text-decoration: underline; white-space: nowrap; }
+.deleteButton:hover { background: transparent; color: #fff; }
+.enemyList { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
+.enemyRow { display: grid; grid-template-columns: minmax(180px,240px) minmax(220px,1fr); gap: 12px; align-items: stretch; }
+.newEnemy { display: flex; flex-direction: column; gap: 9px; padding: 12px; border: 1px solid #886b92; border-radius: 8px; background: rgba(67,39,76,.35); }
+.enemyNameInput { width: 100%; font-weight: 700; }
+.enemyField { display: grid; grid-template-columns: 75px minmax(0,1fr); gap: 6px; align-items: center; }
+.enemyField input { width: 100%; }
+.trapDropZone { min-height: 120px; }
+.calculateBar { justify-content: flex-start; } .calculateButton { background: #69417a; font-weight: 700; } .secondaryButton { background: transparent; }
+.results { display: grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap: 14px; margin-top: 16px; }
+.matchupCard { min-width: 0; padding: 14px; border: 1px solid #886b92; border-radius: 8px; background: rgba(67,39,76,.3); }
+.matchupTitle { margin-bottom: 4px; font-size: 18px; font-weight: 700; overflow-wrap: anywhere; }
+.matchupSubtitle { margin-bottom: 12px; color: #d0bfd6; font-size: 13px; }
+.damageLine { margin: 7px 0; overflow-wrap: anywhere; } .win { color: #8df0ae; font-weight: 700; } .lose { color: #ffb0b0; font-weight: 700; }
+.modifierSelections { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-top: 12px; }
+.selectionGroup { min-width: 0; padding: 8px; border: 1px solid #674a71; border-radius: 6px; }
+.selectionGroup h4 { margin: 0 0 7px; font-size: 14px; }
+.selectionOption { display: flex; align-items: flex-start; gap: 7px; margin: 6px 0; font-size: 13px; overflow-wrap: anywhere; }
+.selectionOption input { flex: 0 0 auto; margin-top: 2px; }
+.wizardColor-blue { accent-color: #4da3ff !important; } .wizardColor-red { accent-color: #ff5c69 !important; }
+.wizardColor-green { accent-color: #52d273 !important; } .wizardColor-yellow { accent-color: #f5d547 !important; }
+.emptyMessage { color: #cdbdd2; font-style: italic; }
+@media (max-width:760px) { body { padding: 12px; } .section { padding: 12px; } .chooseModifier { grid-template-columns: 1fr; } .enemyRow { grid-template-columns: 1fr; } .results { grid-template-columns: 1fr; } .modifierSelections { grid-template-columns: 1fr; } }
+
+/* Hide number input arrows across Chromium, Safari, and Firefox. */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.modifierPercentField {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 20px;
+}
+.modifierPercentField .modifierPercent {
+  width: 55px;
+}
+.assignedBlade, .assignedTrap {
+  width: 142px;
+  min-height: 115px;
+  justify-content: flex-start;
+}
+.assignedSelections {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  width: 100%;
+  margin: 4px 0 8px;
+}
+.assignedSelection {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.assignedSelection input {
+  flex: 0 0 auto;
+}
+.assignedSelection span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* Compact layout: less scrolling without sacrificing readability. */
 body {
-    background-color: #291530;
-    color: #f2f2f2;
-    line-height: 2;
-    font-size: 18px;
+  padding: 14px;
+  line-height: 1.32;
+  font-size: 14px;
 }
 
-button {
-    font-size: 16px;
+.title { font-size: clamp(28px, 4vw, 42px); }
+.subtitle { margin: 3px auto 14px; font-size: 13px; }
+
+.section {
+  padding: 11px 12px;
+  margin-bottom: 13px;
+  border-radius: 8px;
 }
+.sectionHeading, .calculateBar { gap: 8px; }
+h2 { font-size: 18px; }
+h3 { font-size: 15px; margin: 0 0 6px; }
+.helpText { margin: 5px 0 8px; font-size: 12px; }
 
-input {
-    border-radius: 8px;
-    width: 100px;
-    height: 20px;
-    font-size: 20px;
-    text-align: center;
-}
+button { padding: 5px 9px; font-size: 13px; }
+input[type="number"], input[type="text"] { padding: 4px 6px; }
 
-
-
-.title {
-    text-align: center;
-    font-size: 60px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-    font-family: Roboto;
-
-}
+.wizardList, .enemyList { gap: 9px; margin-top: 9px; }
+.newWizard, .newEnemy { padding: 9px; border-radius: 7px; }
+.wizardTop { gap: 7px; margin-bottom: 8px; }
+.wizardName { font-size: 16px; }
+.wizardNumber { font-size: 12px; }
+.wizardCollapsed .wizardTop { margin-bottom: 0; }
+.wizardBody[hidden] { display: none !important; }
+.minimizeWizardButton { margin-left: auto; }
 
 .inputContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    border: 1px solid #f2f2f2;
-    padding: 8px;
-    margin-bottom: 20px;
+  gap: 7px;
+  margin-bottom: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+}
+.inputWidth { gap: 3px; font-size: 12px; }
+
+.bladeDropZone, .enemyTrapDropZone, .templateContainer {
+  min-height: 80px;
+  padding: 7px;
+}
+.bladeDropZone, .enemyTrapDropZone { gap: 6px; }
+.dropLabel { font-size: 12px; }
+
+.chooseModifier { gap: 11px; }
+.templateContainer { margin-top: 5px; }
+.templateList { gap: 6px; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); }
+
+.modifierCard {
+  width: 95px;
+  min-height: 77px;
+  padding: 5px 4px 21px;
+  gap: 4px;
+}
+.modifierCaption { font-size: 11px; }
+.modifierPercentField { font-size: 17px; }
+.modifierPercentField .modifierPercent {
+  width: 48px;
+  font-size: 16px;
+}
+.deleteButton { bottom: 2px; font-size: 11px; padding: 0 4px; }
+.assignedBlade, .assignedTrap {
+  width: 133px;
+  min-height: 92px;
+}
+.assignedSelections { gap: 3px; margin: 2px 0 5px; }
+.assignedSelection { gap: 4px; font-size: 10px; }
+
+.enemyRow { gap: 8px; }
+.newEnemy { gap: 6px; }
+.enemyTrapDropZone { min-height: 90px; }
+
+.results { gap: 9px; margin-top: 11px; }
+.matchupCard { padding: 10px; }
+.matchupTitle { font-size: 16px; margin-bottom: 2px; }
+.matchupSubtitle { font-size: 12px; margin-bottom: 7px; }
+.damageLine { margin: 4px 0; }
+
+@media (max-width: 760px) {
+  body { padding: 9px; }
+  .section { padding: 9px; }
+  .wizardTop { flex-wrap: wrap; }
+  .wizardName { flex: 1 1 150px; }
+  .minimizeWizardButton { margin-left: 0; }
 }
 
-.inputWidth {
-    display: flex;
-
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+/* Individual enemy minimization, matching the wizard controls. */
+.enemyRow {
+  display: block;
+  border: 1px solid #886b92;
+  border-radius: 7px;
+  padding: 8px;
+  background: rgba(67,39,76,.35);
+}
+.enemyTop {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 7px;
+}
+.enemyTop .enemyNameInput {
+  width: min(300px, 100%);
+  flex: 1 1 180px;
+}
+.minimizeEnemyButton { margin-left: auto; }
+.enemyBody {
+  display: grid;
+  grid-template-columns: minmax(180px,240px) minmax(220px,1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+.enemyBody[hidden] { display: none !important; }
+.enemyCollapsed .enemyTop { margin-bottom: 0; }
+.enemyBody .newEnemy {
+  border: none;
+  background: transparent;
+  padding: 2px;
+}
+@media (max-width:760px) {
+  .enemyBody { grid-template-columns: 1fr; }
+  .minimizeEnemyButton { margin-left: 0; }
 }
 
-.profile {
-    font-size: 20px;
+/* Include switches are independent from minimize/expand state. */
+.includeToggle { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; white-space: nowrap; font-size: 12px; }
+.includeToggle input { width: 15px; height: 15px; margin: 0; cursor: pointer; accent-color: #c3a5ff; }
+.templatePanelBody[hidden] { display: none !important; }
+.templateCollapsed .sectionHeading { margin-bottom: 0; }
+.minimizeTemplateButton { margin-left: auto; }
+
+/* Keep Include at the upper right, immediately before Minimize. */
+.wizardTop .includeToggle { margin-left: auto; }
+.wizardTop .minimizeWizardButton { margin-left: 0; }
+@media (max-width: 760px) {
+  .wizardTop .includeToggle { margin-left: auto; }
+  .wizardTop .minimizeWizardButton { margin-left: 0; }
 }
 
-#bladesInput,
-#trapsInput {
-    margin: 0;
+/* School selectors and compact, removable per-school enemy resistance rows. */
+.wizardSchool, .resistanceSchool {
+  color: #f2f2f2;
+  background: #43274c;
+  border: 1px solid #997aab;
+  border-radius: 6px;
+  padding: 5px 6px;
+  font-size: 13px;
+  min-width: 95px;
+  max-width: 125px;
+}
+.wizardTop .wizardSchool { flex: 0 0 auto; }
+.resistanceBlock { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.resistanceHeader { display: flex; align-items: center; justify-content: space-between; gap: 6px; font-size: 12px; }
+.resistanceHeader button { font-size: 11px; padding: 3px 6px; }
+.resistanceList { display: flex; flex-direction: column; gap: 5px; }
+.resistanceEntry { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.resistanceEntry .resistInput { width: 65px; min-width: 0; }
+.resistanceEntry .removeResistanceButton { padding: 4px 6px; font-size: 11px; }
+.enemyBody { grid-template-columns: minmax(240px, 340px) minmax(220px, 1fr); }
+@media (max-width: 760px) { .enemyBody { grid-template-columns: 1fr; } }
+
+/* Group multiple school resistances under one percentage value. */
+.resistanceEntry { flex-wrap: nowrap; align-items: flex-start; }
+.resistanceSchoolPicker {
+  position: relative;
+  flex: 1 1 160px;
+  min-width: 135px;
+  max-width: 270px;
+}
+.resistanceSchoolSummary {
+  display: block;
+  cursor: pointer;
+  color: #f2f2f2;
+  background: #43274c;
+  border: 1px solid #997aab;
+  border-radius: 6px;
+  padding: 5px 24px 5px 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+.resistanceSchoolSummary::after {
+  content: "▾";
+  position: absolute;
+  right: 7px;
+  top: 4px;
+}
+.resistanceSchoolPicker[open] .resistanceSchoolSummary::after { content: "▴"; }
+.resistanceSchoolOptions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 3px;
+  padding: 8px;
+  margin-top: 3px;
+  background: #43274c;
+  border: 1px solid #997aab;
+  border-radius: 7px;
+  box-shadow: 0 5px 14px #140a18b8;
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  width: min(265px, 80vw);
+}
+.resistanceSchoolOption {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 4px;
+}
+.resistanceSchoolOption:hover { background: #64426d; }
+.resistanceSchoolOption input { width: 14px; height: 14px; accent-color: #c3a5ff; margin: 0; }
+.resistanceEntry .resistInput { flex: 0 0 65px; }
+@media (max-width: 550px) {
+  .resistanceEntry { flex-wrap: wrap; }
+  .resistanceSchoolPicker { flex-basis: 100%; max-width: none; }
 }
 
-.chooseModifier {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    align-items: flex-start;
+/* Drag handles on assigned modifiers: rearrange without dragging inputs. */
+.reorderHandle {
+  align-self: stretch;
+  text-align: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: #e7d3f0;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: rgba(255,255,255,.07);
 }
+.reorderHandle:active { cursor: grabbing; }
+.modifierCard.reorderBefore { box-shadow: -4px 0 0 #f3c7ff; }
+.modifierCard.reorderAfter { box-shadow: 4px 0 0 #f3c7ff; }
 
-.chooseBlade,
-.chooseTrap {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+
+/* Phone-friendly touch targets, stacking, and modifier manipulation. */
+.templateBlade, .templateTrap, .reorderHandle {
+  touch-action: none;
 }
-
-#bladeResistInput {
-    font-size: 16px;
+.touchReordering {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.modifierCard.touchDragging {
+  opacity: .5;
+  outline: 2px dashed #e8c0ff;
+}
+button, select, input {
+  max-width: 100%;
+}
+@media (max-width: 600px) {
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; padding: 8px; font-size: 14px; }
+  .calculatorContainer { width: 100%; min-width: 0; }
+  .title { font-size: clamp(25px, 7vw, 34px); line-height: 1.15; }
+  .section { padding: 9px; margin-bottom: 10px; }
+  .sectionHeading { flex-wrap: wrap; align-items: center; }
+  .sectionHeading h2 { margin-right: auto; }
+  .wizardTop, .enemyTop { gap: 6px; }
+  .wizardName, .enemyNameInput { min-width: 0; flex: 1 1 125px; }
+  .wizardSchool { flex: 0 0 auto; }
+  .includeToggle { margin-left: auto; }
+  .inputContainer { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+  .inputWidth { min-width: 0; }
+  .inputWidth input { width: 100%; box-sizing: border-box; }
+  .chooseModifier { display: grid; grid-template-columns: minmax(0, 1fr); gap: 9px; }
+  .modifierPanel { min-width: 0; }
+  .templateList, .bladeDropZone, .enemyTrapDropZone { gap: 7px; }
+  .bladeDropZone, .enemyTrapDropZone {
+    min-height: 110px;
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
+  .modifierCard { flex: 0 0 auto; }
+  .assignedBlade, .assignedTrap { width: 133px; }
+  .reorderHandle { min-height: 27px; display: flex; align-items: center; justify-content: center; }
+  .calculateBar { flex-wrap: wrap; }
+  .calculateBar button { flex: 1 1 190px; min-height: 40px; }
+  .results { grid-template-columns: minmax(0, 1fr); }
+  .matchupCard { min-width: 0; overflow-wrap: anywhere; }
+  button { min-height: 32px; }
+  input[type="number"], input[type="text"], select { font-size: 16px; }
+}
+@media (max-width: 360px) {
+  .inputContainer { grid-template-columns: minmax(0, 1fr); }
 }

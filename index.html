@@ -1,92 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W101 Calculator</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W101 Damage Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
-
 <body>
-    <h1 class="title">Welcome, to the Spiral!</h1>
-
-    <div class="calculatorContainer">
-        <button class="profile">
-            <a href="PFSelect.html">Profiles</a>
-        </button>:
-        <div class="profileName"></div>
-        <div class="inputContainer">
-            <div class="inputWidth">
-                <span class="baseSpellDamage">Base Spell Damage: <br><input type="number" id="baseDamageInput"
-                        value="0"><br></span>
-            </div>
-            <div class="inputWidth">
-                <span class="enchant">Enchant: <br><input type="number" id="enchantInput" value="0"><br></span>
-            </div>
-            <div class="inputWidth">
-                <span class="basePercentDamage">Base Damage Percent: <br><input type="number" id="damagePercentInput"
-                        value="0">%<br></span>
-            </div>
-            <div class="inputWidth">
-                <span class="pierce">Pierce: <br><input type="number" id="pierceInput" value="0">%<br></span>
-            </div>
-            <div class="inputWidth">
-                <div class="allowed">
-                    <span class="inputWidth">Traps Allowed? <input type="checkbox" id="trapsInput" checked
-                            onchange="toggleTraps()" checked></span>
-                    <span class="inputWidth">Blades Allowed? <input type="checkbox" id="bladesInput" checked
-                            onchange="toggleBlades()" checked></span>
-                </div>
-            </div>
+  <header>
+    <h1 class="title">Welcome to the Spiral!</h1>
+    <p class="subtitle">Build wizards, enemies, blades, and traps, then find the smallest winning modifier combination.</p>
+  </header>
+  <main class="calculatorContainer">
+    <section class="section">
+      <div class="sectionHeading"><h2>Wizards</h2><button type="button" onclick="addWizard()">New Wizard</button></div>
+      <div id="wizardList" class="wizardList"></div>
+    </section>
+    <section class="section">
+      <div class="chooseModifier">
+        <div class="modifierPanel" id="bladeTemplatePanel">
+          <div class="sectionHeading"><h2>Blade Templates</h2><button type="button" class="minimizeTemplateButton" aria-expanded="true" aria-controls="bladeTemplateBody" onclick="toggleTemplatePanel('bladeTemplatePanel')">− Minimize</button><button type="button" onclick="newBlade()">New Blade</button></div>
+          <div class="templatePanelBody" id="bladeTemplateBody">
+            <p class="helpText">Drag blades into a wizard's blade drop zone. Templates are not included in calculations.</p>
+            <div class="templateContainer"><div id="bladeList" class="templateList"></div></div>
+          </div>
         </div>
-
-        <div class="chooseModifier">
-            <div id="chooseBlade" class="chooseBlade" style="display: block;">
-                Choose a Blade:
-                <button onclick="newBlade()">New Blade</button>
-
-                <div class="bladeContainer" id="bladeContainer" style="display: none;">
-                    <span>Blade Percent: <input type="number" id="bladePercentInput" value="0">%<br></span>
-                    <span>Max Blade Amount: <input type="number" id="bladeAmountInput" value="0"><br></span>
-                    <button onclick="addBlade()">Add Blade</button>
-                    <button onclick="cancelBlade()">Close</button>
-                </div>
-                <div id="bladeList"></div>
-            </div><br>
-
-
-            <div id="chooseTrap" class="chooseTrap" style="display: block;">
-                Choose a Trap:
-                <button onclick="newTrap()">New Trap</button>
-
-                <div class="trapContainer" id="trapContainer" style="display: none;">
-                    <span>Trap Percent: <input type="number" id="trapPercentInput" value="0">%<br></span>
-                    <span>Max Trap Amount: <input type="number" id="trapAmountInput" value="0"><br></span>
-                    <button onclick="addTrap()">Add Trap</button>
-                    <button onclick="cancelTrap()">Close</button>
-                </div>
-                <div id="trapList"></div>
-            </div>
-        </div><br>
-
-
-
-        <div class="enemyContainer">
-            <span>Enemy Health: <input type="number" id="healthInput" value="0">HP<br></span>
-            <span>Enemy Resist: <input type="number" id="resistInput" value="0">%<br></span><br>
+        <div class="modifierPanel" id="trapTemplatePanel">
+          <div class="sectionHeading"><h2>Trap Templates</h2><button type="button" class="minimizeTemplateButton" aria-expanded="true" aria-controls="trapTemplateBody" onclick="toggleTemplatePanel('trapTemplatePanel')">− Minimize</button><button type="button" onclick="newTrap()">New Trap</button></div>
+          <div class="templatePanelBody" id="trapTemplateBody">
+            <p class="helpText">Drag traps into an enemy's trap drop zone. Templates are not included in calculations.</p>
+            <div class="templateContainer"><div id="trapList" class="templateList"></div></div>
+          </div>
         </div>
-
-        <button onclick="calculateDamage()">Calculate</button>
-        <div id="percentUsed"></div>
-        <div id="totalDamage"></div>
-        <div id="bladeDamageOnly"></div>
-    </div>
-
-
-
-
+      </div>
+    </section>
+    <section class="section">
+      <div class="sectionHeading"><h2>Enemies</h2><button type="button" onclick="addEnemy()">New Enemy</button></div>
+      <div id="enemyList" class="enemyList"></div>
+    </section>
+    <section class="section">
+      <div class="calculateBar">
+        <button type="button" class="calculateButton" onclick="calculateDamage()">Calculate Minimum Modifiers</button>
+        <button type="button" class="secondaryButton" onclick="clearSavedData()">Clear Saved Calculator Data</button>
+      </div>
+      <p class="helpText">Calculate selects the fewest modifiers needed to defeat each enemy for each wizard. Toggle the matchup checkboxes afterward to update damage immediately.</p>
+      <div id="results" class="results"></div>
+    </section>
+  </main>
 </body>
-
 </html>

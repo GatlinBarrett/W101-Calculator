@@ -4,13 +4,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W101 Calculator</title>
   <link rel="stylesheet" href="test.css">
   <script src="test.js" defer></script>
-  <title>Test</title>
 </head>
 
 <body>
-  
+  <h1 class="title">Welcome, to the Spiral!</h1>
+
+  <div class="calculatorContainer">
+
+    <button onclick="addWizard()">New Wizard</button>
+    <div id="wizardList"></div>
+
+    <!-- <button onclick="addWizard()">New Wizard</button>
+    <div class="newWizard" id="newWizard">
+      <input class="wizardName" type="text" placeholder="Wizard Name">
+
+
+
+
+      <div class="inputContainer">
+
+        <div class="inputWidth">
+          <span class="baseSpellDamage">Spell Damage<br><input type="number" id="baseDamageInput" value="0"></span>
+          <span class="multiply">x</span>
+          <span class="pipAmount">X-Pip Amount<br><input type="number" id="pipAmountInput" value="1"></span>
+        </div>
+        <div class="inputWidth">
+          <span class="enchant">Enchant<br><input type="number" id="enchantInput" value="0"><br></span>
+        </div>
+        <div class="inputWidth">
+          <span class="basePercentDamage">Percent Mod<br><input type="number" id="damagePercentInput"
+              value="0">%<br></span>
+        </div>
+        <div class="inputWidth">
+          <span class="pierce">Pierce<br><input type="number" id="pierceInput" value="0">%<br></span>
+        </div>
+      </div>
+    </div><br> -->
+
+    <div class="wizardAndEnemy">
+      <div class="chooseModifier">
+        <div id="chooseBlade" class="chooseBlade">
+          Choose a Blade:
+          <button onclick="newBlade()">New Blade</button>
+
+          <div class="bladeContainer" id="bladeContainer">
+            <div id="bladeList">
+            </div>
+          </div>
+        </div><br>
+
+
+        <div id="chooseTrap" class="chooseTrap">
+          Choose a Trap:
+          <button onclick="newTrap()">New Trap</button>
+
+          <div class="trapContainer" id="trapContainer" style="display: block;">
+            <div id="trapList">
+            </div>
+          </div>
+        </div>
+      </div><br><br>
+
+
+
+
+      <button onclick="addEnemy()">New Enemy</button>
+      <div id="enemyList"></div><br>
+
+      <button onclick="calculateDamage()">Calculate</button>
+      <div id="percentUsed"></div>
+      <div id="totalDamage"></div>
+      <div id="bladeDamageOnly"></div>
+    </div>
+  </div>
+
+
+
+
 </body>
 
 </html>
