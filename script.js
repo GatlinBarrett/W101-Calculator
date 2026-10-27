@@ -85,7 +85,8 @@ function saveCalculatorData() {
       pierce: wizard.querySelector(".pierceInput").value,
       blades: [...wizard.querySelectorAll(".assignedBlade")].map(card => ({
         id: card.dataset.id, sourceId: card.dataset.sourceId,
-        percent: card.querySelector(".modifierPercent").value
+        percent: card.querySelector(".modifierPercent").value,
+        name: card.querySelector(".assignedModifierName").value
       }))
     })),
     bladeTemplates: [...document.querySelectorAll("#bladeList .templateBlade")].map(card => ({
@@ -106,7 +107,8 @@ function saveCalculatorData() {
       })),
       traps: [...row.querySelectorAll(".assignedTrap")].map(card => ({
         id: card.dataset.id, sourceId: card.dataset.sourceId,
-        percent: card.querySelector(".modifierPercent").value
+        percent: card.querySelector(".modifierPercent").value,
+        name: card.querySelector(".assignedModifierName").value
       }))
     })),
     matchupSelections: savedMatchupSelections,
@@ -480,16 +482,19 @@ function createAssignedModifier(type, data = {}) {
   card.dataset.sourceId = data.sourceId || "";
   card.dataset.type = type;
 
-  const title = document.createElement("span");
-  title.className = "modifierCaption";
-  title.textContent = type === "blade" ? "Assigned blade" : "Assigned trap";
-
-  // Only the handle starts a reorder drag, so inputs and checkboxes stay usable.
   const handle = document.createElement("span");
   handle.className = "reorderHandle";
   handle.draggable = true;
   handle.title = "Drag to change modifier order";
   handle.textContent = "⠿ Move";
+
+  const name = document.createElement("input");
+  name.type = "text";
+  name.className = "assignedModifierName";
+  name.placeholder = type === "blade" ? "Blade name" : "Trap name";
+  name.setAttribute("aria-label", type === "blade" ? "Assigned blade name" : "Assigned trap name");
+  name.maxLength = 60;
+  name.value = data.name ?? "";
 
   const percent = document.createElement("input");
   percent.type = "number";
@@ -498,27 +503,21 @@ function createAssignedModifier(type, data = {}) {
   percent.placeholder = "%";
   percent.value = data.percent ?? "";
 
-  const caption = document.createElement("span");
-  caption.className = "modifierCaption";
-  caption.textContent = "Percent";
-
-  const remove = document.createElement("button");
-  remove.type = "button";
-  remove.className = "deleteButton";
-  remove.textContent = "Remove";
   const percentField = document.createElement("div");
   percentField.className = "modifierPercentField";
   const sign = document.createElement("span");
   sign.textContent = "%";
   percentField.append(percent, sign);
 
-  if (card.classList.contains("assignedBlade") || card.classList.contains("assignedTrap")) {
-    const choices = document.createElement("div");
-    choices.className = "assignedSelections";
-    card.append(handle, title, percentField, choices, remove);
-  } else {
-    card.append(title, percentField, caption, remove);
-  }
+  const choices = document.createElement("div");
+  choices.className = "assignedSelections";
+
+  const remove = document.createElement("button");
+  remove.type = "button";
+  remove.className = "deleteButton";
+  remove.textContent = "Remove";
+
+  card.append(handle, name, percentField, choices, remove);
   return card;
 }
 
@@ -776,7 +775,7 @@ function getWizardData(element) {
     blades: [...element.querySelectorAll(".assignedBlade")].map(card => ({
       id: card.dataset.id,
       percent: numeric(card.querySelector(".modifierPercent").value),
-      label: `Blade ${formatPercent(card.querySelector(".modifierPercent").value)}`
+      label: card.querySelector(".assignedModifierName").value.trim() || `Blade ${formatPercent(card.querySelector(".modifierPercent").value)}`
     }))
   };
 }
@@ -794,7 +793,7 @@ function getEnemyData(row) {
     traps: [...row.querySelectorAll(".assignedTrap")].map(card => ({
       id: card.dataset.id,
       percent: numeric(card.querySelector(".modifierPercent").value),
-      label: `Trap ${formatPercent(card.querySelector(".modifierPercent").value)}`
+      label: card.querySelector(".assignedModifierName").value.trim() || `Trap ${formatPercent(card.querySelector(".modifierPercent").value)}`
     }))
   };
 }
