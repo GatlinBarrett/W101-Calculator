@@ -822,19 +822,40 @@ function getEnemyData(row) {
   };
 }
 
+function getEnchantSplit(wizard) {
+  const hasDirectDamage = wizard.spellDamage * wizard.pips > 0;
+  if (!wizard.dotEnabled) {
+    return { directEnchant: wizard.enchant, dotEnchant: 0 };
+  }
+  if (hasDirectDamage) {
+    return { directEnchant: wizard.enchant / 2, dotEnchant: wizard.enchant / 2 };
+  }
+  return { directEnchant: 0, dotEnchant: wizard.enchant };
+}
+
 function baseDamage(wizard) {
-  return ((wizard.spellDamage * wizard.pips) + wizard.enchant) * (1 + wizard.percentMod / 100);
+  const { directEnchant } = getEnchantSplit(wizard);
+  return ((wizard.spellDamage * wizard.pips) + directEnchant) *
+    (1 + wizard.percentMod / 100);
 }
 
 function damageBeforeModifiers(wizard, enemy) {
-  return baseDamage(wizard) * Math.max(0, 1 - (resistanceForSchool(enemy, wizard.school) - wizard.pierce) / 100);
+  return baseDamage(wizard) *
+    Math.max(0, 1 - (resistanceForSchool(enemy, wizard.school) - wizard.pierce) / 100);
 }
 
 function dotDamageForMatchup(wizard, enemy, selectedIds) {
   if (!wizard.dotEnabled) return 0;
-  const resistMultiplier = Math.max(0, 1 - (resistanceForSchool(enemy, wizard.school) - wizard.pierce) / 100);
-  const dotBase = wizard.dotDamage * (1 + wizard.percentMod / 100) * resistMultiplier;
-  return applyModifiers(dotBase, wizard.blades.filter(item => selectedIds.has(item.id)));
+  const { dotEnchant } = getEnchantSplit(wizard);
+  const resistMultiplier = Math.max(
+    0, 1 - (resistanceForSchool(enemy, wizard.school) - wizard.pierce) / 100
+  );
+  const dotBase = (wizard.dotDamage + dotEnchant) *
+    (1 + wizard.percentMod / 100) * resistMultiplier;
+  return applyModifiers(
+    dotBase,
+    wizard.blades.filter(item => selectedIds.has(item.id))
+  );
 }
 
 function combinedDamageForMatchup(wizard, enemy, selectedIds) {
