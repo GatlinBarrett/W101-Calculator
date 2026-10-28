@@ -426,3 +426,11 @@ button, select, input {
 @media (max-width: 600px) {
   .assignedModifierName { font-size: 16px; }
 }
+
+/* Optional damage-over-time controls in each wizard card. */
+.dotControls { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin: 4px 0 9px; }
+.dotToggle { display:inline-flex; align-items:center; gap:6px; font-weight:600; cursor:pointer; }
+.dotToggle input { width:16px; height:16px; }
+.dotDamageField { max-width:170px; }
+.dotDamageField[hidden], .dotDamageLine[hidden] { display:none !important; }
+.dotDamageLine { color:#e9ccff; }

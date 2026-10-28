@@ -83,6 +83,8 @@ function saveCalculatorData() {
       enchant: wizard.querySelector(".enchantInput").value,
       percentMod: wizard.querySelector(".damagePercentInput").value,
       pierce: wizard.querySelector(".pierceInput").value,
+      dotEnabled: wizard.querySelector(".dotEnabled").checked,
+      dotDamage: wizard.querySelector(".dotDamageInput").value,
       blades: [...wizard.querySelectorAll(".assignedBlade")].map(card => ({
         id: card.dataset.id, sourceId: card.dataset.sourceId,
         percent: card.querySelector(".modifierPercent").value,
@@ -366,6 +368,26 @@ function addWizard(data = {}) {
     makeNumberInput("pierceInput", data.pierce ?? 0, "Pierce (%)")
   );
 
+  const dotControls = document.createElement("div");
+  dotControls.className = "dotControls";
+  const dotLabel = document.createElement("label");
+  dotLabel.className = "dotToggle";
+  const dotCheckbox = document.createElement("input");
+  dotCheckbox.type = "checkbox";
+  dotCheckbox.className = "dotEnabled";
+  dotCheckbox.checked = Boolean(data.dotEnabled);
+  dotLabel.append(dotCheckbox, document.createTextNode("DoT"));
+
+  const dotInput = makeNumberInput("dotDamageInput", data.dotDamage ?? 0, "DoT Base Damage");
+  dotInput.classList.add("dotDamageField");
+  dotInput.hidden = !dotCheckbox.checked;
+  dotCheckbox.addEventListener("change", () => {
+    dotInput.hidden = !dotCheckbox.checked;
+    if (calculationHasRun) refreshMatchupOutputs();
+    saveCalculatorData();
+  });
+  dotControls.append(dotLabel, dotInput);
+
   const heading = document.createElement("h3");
   heading.textContent = "Assigned Blades";
 
@@ -378,7 +400,7 @@ function addWizard(data = {}) {
   hint.textContent = "Drop blade templates here";
   zone.appendChild(hint);
 
-  body.append(inputs, heading, zone);
+  body.append(inputs, dotControls, heading, zone);
   wizard.append(top, body);
   document.getElementById("wizardList").appendChild(wizard);
 
@@ -772,6 +794,8 @@ function getWizardData(element) {
     enchant: numeric(element.querySelector(".enchantInput").value),
     percentMod: numeric(element.querySelector(".damagePercentInput").value),
     pierce: numeric(element.querySelector(".pierceInput").value),
+    dotEnabled: element.querySelector(".dotEnabled").checked,
+    dotDamage: numeric(element.querySelector(".dotDamageInput").value),
     blades: [...element.querySelectorAll(".assignedBlade")].map(card => ({
       id: card.dataset.id,
       percent: numeric(card.querySelector(".modifierPercent").value),
@@ -804,6 +828,19 @@ function baseDamage(wizard) {
 
 function damageBeforeModifiers(wizard, enemy) {
   return baseDamage(wizard) * Math.max(0, 1 - (resistanceForSchool(enemy, wizard.school) - wizard.pierce) / 100);
+}
+
+function dotDamageForMatchup(wizard, enemy, selectedIds) {
+  if (!wizard.dotEnabled) return 0;
+  const resistMultiplier = Math.max(0, 1 - (resistanceForSchool(enemy, wizard.school) - wizard.pierce) / 100);
+  const dotBase = wizard.dotDamage * (1 + wizard.percentMod / 100) * resistMultiplier;
+  return applyModifiers(dotBase, wizard.blades.filter(item => selectedIds.has(item.id)));
+}
+
+function combinedDamageForMatchup(wizard, enemy, selectedIds) {
+  const modifiers = [...wizard.blades, ...enemy.traps].filter(item => selectedIds.has(item.id));
+  const direct = applyModifiers(damageBeforeModifiers(wizard, enemy), modifiers);
+  return direct + dotDamageForMatchup(wizard, enemy, selectedIds);
 }
 
 function applyModifiers(base, modifiers) {
@@ -925,12 +962,14 @@ function renderAllMatchups(shouldOptimize) {
     noResistLine.className = "damageLine noResistDamageLine";
     const finalLine = document.createElement("div");
     finalLine.className = "damageLine finalDamageLine";
+    const dotLine = document.createElement("div");
+    dotLine.className = "damageLine dotDamageLine";
     const status = document.createElement("div");
     status.className = "damageLine winStatus";
     const count = document.createElement("div");
     count.className = "damageLine modifierCount";
 
-    card.append(title, subtitle, noResistLine, bladeLine, finalLine, status, count);
+    card.append(title, subtitle, noResistLine, bladeLine, finalLine, dotLine, status, count);
     results.appendChild(card);
     updateMatchupCard(card);
   }));
@@ -962,30 +1001,17 @@ function createSelectionCheckbox(modifier, selectedIds, wizardIndex, kind) {
 }
 
 function chooseMinimumModifiers(wizard, enemy, modifiers) {
-  const base = damageBeforeModifiers(wizard, enemy);
   const target = enemy.health;
-
-  if (base >= target) {
-    return { selectedIds: new Set(), damage: base, wins: true };
-  }
-
-  // Priority is based on the actual order of the assigned cards:
-  // enemy traps first, followed by wizard blades. Never sort by percent.
-  const orderedModifiers = [
-    ...enemy.traps,
-    ...wizard.blades
-  ];
-
-  let damage = base;
   const selectedIds = new Set();
+  let damage = combinedDamageForMatchup(wizard, enemy, selectedIds);
 
-  for (const modifier of orderedModifiers) {
-    // Zero or negative modifiers cannot help reach a positive health target.
+  if (damage >= target) return { selectedIds, damage, wins: true };
+
+  // Traps first, then blades, preserving their assigned positions.
+  for (const modifier of [...enemy.traps, ...wizard.blades]) {
     if (modifier.percent <= 0) continue;
-
     selectedIds.add(modifier.id);
-    damage *= 1 + modifier.percent / 100;
-
+    damage = combinedDamageForMatchup(wizard, enemy, selectedIds);
     if (damage >= target) break;
   }
 
@@ -1019,12 +1045,19 @@ function updateMatchupCard(card) {
     `Blades + pierce (resist included): ${formatNumber(bladeOnly)}`;
   card.querySelector(".finalDamageLine").textContent =
     `Blades + pierce + traps (resist included): ${formatNumber(finalDamage)}`;
+  const dotDamage = dotDamageForMatchup(wizard, enemy, selectedIds);
+  const dotLine = card.querySelector(".dotDamageLine");
+  dotLine.hidden = !wizard.dotEnabled;
+  dotLine.textContent = `DoT damage (blades + pierce + resist, no traps): ${formatNumber(dotDamage)}`;
+  const totalDamage = finalDamage + dotDamage;
   const status = card.querySelector(".winStatus");
-  const wins = finalDamage >= enemy.health;
+  const wins = totalDamage >= enemy.health;
   status.textContent = wins ? "Defeats enemy" : "Does not defeat enemy";
   status.classList.toggle("win", wins);
   status.classList.toggle("lose", !wins);
-  card.querySelector(".modifierCount").textContent = `Selected modifiers: ${selectedIds.size}`;
+  card.querySelector(".modifierCount").textContent = wizard.dotEnabled
+    ? `Combined direct + DoT damage: ${formatNumber(totalDamage)} · Selected modifiers: ${selectedIds.size}`
+    : `Selected modifiers: ${selectedIds.size}`;
 
 }
 
